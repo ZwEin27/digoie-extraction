@@ -3,6 +3,8 @@
 from digoie.core.http.stream.base import stream
 from digoie.core.extractor import reverb
 from digoie.core.ml.dataset import feature
+from digoie.core.ml.dataset.labeling import labeling
+
 
 def extract():
     """ extract useful information
@@ -18,11 +20,10 @@ def extract():
     """
 
     dataset = reverb.load_data()
+    # featured = feature.extract(dataset)
+    labels = labeling(dataset)
 
-    featured = feature.extract(dataset)
-    for f in featured:
-        print f
-        break
+
 
 
 

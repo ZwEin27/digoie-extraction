@@ -2,18 +2,16 @@
 import os
 import re
 import math
-from digoie.conf.storage import __elastic_search_dir__, __reverb_input_dir__, REVERB_INPUT_EXT
+from digoie.conf.storage import __elastic_search_dir__, __reverb_input_dir__, __ml_datasets_dir__, REVERB_INPUT_EXT
 
 from digoie.core.files.names import load_names
 from digoie.conf.global_settings import TARGET_PERSON_NAME, TARGET_PHONE_NUMBER
-
-
+from digoie.core.files.file import *
 
 
 def extract(raw, target=TARGET_PERSON_NAME):
     print 'extract features...'
     featured = []
-    
     for line in raw:
         line = preprocess_line(line)
 
@@ -37,6 +35,11 @@ def extract(raw, target=TARGET_PERSON_NAME):
 
         rv4fe_data = ' '.join(var_list)
         featured.append(rv4fe_data)
+
+
+    path = os.path.join(__ml_datasets_dir__, 'featured')
+    list2file(featured, path)
+
     return featured
 
 

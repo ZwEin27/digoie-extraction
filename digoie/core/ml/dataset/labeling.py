@@ -2,14 +2,25 @@
 
 import os
 import re
-from digoie.conf.storage import __elastic_search_dir__, __reverb_input_dir__, REVERB_INPUT_EXT
+from digoie.conf.storage import __elastic_search_dir__, __reverb_input_dir__, __ml_datasets_dir__, REVERB_INPUT_EXT
 from digoie.core.files.names import load_names
 
 
 def labeling(reverb_data):
-    print 'generate labels for machine learning...'
+    print 'generate labels...'
     # return label_name(reverb_data)
-    return label_phone_number(reverb_data)
+    # return label_phone_number(reverb_data)
+    cache_svo(reverb_data)
+    
+
+def cache_svo(raw):
+    path = os.path.join(__ml_datasets_dir__, 'svo')
+    fdp = open(path, 'wb')
+    for line in raw:
+        line = line[:-1]
+        line = line.split('\t')
+        tmp = line[15] + ' | ' + line[16] + ' | ' + line[17] + ' | ' + line[12]
+        fdp.writelines(tmp + '\n')
 
 
 def label_name(reverb_data):
@@ -74,9 +85,9 @@ def label_phone_number(reverb_data):
 # test = 'Daniela please call 818.430.2219 P.S. i dont check.'
 # test = 'If you like Please ? ? ? ? two.one.three.s'
 
-test = '8.1.8.6.9.4.six.zero.four.eight.'
+# test = '8.1.8.6.9.4.six.zero.four.eight.'
 
-print 1 if has_phone_number(test) else 0
+# print 1 if has_phone_number(test) else 0
 
 
 

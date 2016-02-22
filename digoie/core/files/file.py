@@ -4,7 +4,7 @@ from operator import itemgetter
 def list2file(mylist, path, flag='wb'):
     fdp = open(path, flag)
     for item in mylist:
-        fdp.writelines(item)
+        fdp.writelines(item + '\n')
 
 
 
