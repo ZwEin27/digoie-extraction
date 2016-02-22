@@ -24,13 +24,13 @@ def extract(raw, target=TARGET_PERSON_NAME):
 
         var_list = [
                         confidence,
-                        rvd_arg1_val, 
+                        rvd_arg1_val,
+                        rvd_rel_val,  
+                        rvd_arg2_val, 
                         rvd_arg1_post_tags, 
                         rvd_arg1_ct_tags,
-                        rvd_rel_val, 
                         rvd_rel_post_tags, 
                         rvd_rel_ct_tags,
-                        rvd_arg2_val, 
                         rvd_arg2_post_tags, 
                         rvd_arg2_ct_tags
                     ]
@@ -53,9 +53,13 @@ def load_ar_vals(line, target=TARGET_PERSON_NAME):
     elif target == TARGET_PHONE_NUMBER:
         return load_av4phoneno(line)
     else:
-        return load_av4name(line)
+        return load_av4default(line)
 
-    
+def load_av4default(line):
+    rvd_arg1_val = str(line[15]).replace('.', '')
+    rvd_rel_val  = str(line[16]).replace('.', '')
+    rvd_arg2_val = str(line[17]).replace('.', '')
+    return rvd_arg1_val, rvd_rel_val, rvd_arg2_val
 
 def load_av4name(line):
     rvd_arg1_val = str(line[15]).replace('.', '')

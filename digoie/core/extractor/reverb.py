@@ -1,7 +1,5 @@
 """ReVerb Information Extraction
 
-Last Run
-Summary: 61055 extractions, 104808 sentences, 496 files, 287 seconds
 """
 
 import os
@@ -13,7 +11,6 @@ from digoie.conf.storage import __root_dir__, __app_res_dir__, __reverb_dir__, _
 ##################################################################
 
 def extract(path=None):
-    # if purpose == 'purpose':
     if not path:
         path = __reverb_input_dir__
     filename_list = [os.path.join(path, f) for f in os.listdir(path) if os.path.isfile(os.path.join(path, f)) and f.split('.')[-1] == REVERB_INPUT_EXT[1:]]
@@ -24,16 +21,6 @@ def extract(path=None):
         os.remove(output_path)
     lauch(filename_list, output_path)
     return load_data()
-    # elif purpose == 'predict':
-    #     if path:
-    #         filename_list = [os.path.join(path, f) for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-    #         filename = 'reverb' + REVERB_OUTPUT_EXT
-    #         path_output = os.path.join(path, 'tmp_output')
-    #         path = os.path.join(path, filename)
-    #         if os.path.isfile(path):
-    #             os.remove(path)
-    #         lauch(filename_list, path)
-    #         return load_data(path)
 
            
 

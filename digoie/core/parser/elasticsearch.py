@@ -1,3 +1,7 @@
+""" Departed
+"""
+
+
 import os
 import json
 from digoie.conf.storage import __elastic_search_dir__, __reverb_input_dir__, ES_RAW_EXT, REVERB_INPUT_EXT

@@ -1,9 +1,16 @@
-""" Departed
+""" TO DO
+
+write a factory function for different source
+currently it's okay for parseing just one source format
+
+
+Input: elastic search output as input
+Output: 
 """
 
 import json
 
-def parse_sentence(raw):
+def parse(raw):
     raw = json.load(raw)
     sentences = []
     hits = raw['hits']['hits']
