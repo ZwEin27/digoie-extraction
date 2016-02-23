@@ -6,11 +6,48 @@ from digoie.conf.storage import __elastic_search_dir__, __reverb_input_dir__, __
 from digoie.core.files.names import load_names
 
 
+
+PROPERTY_DES = 100
+PROPERTY_REL = 200
+PROPERTY_ACT = 300
+
+
 def labeling(reverb_data):
     print 'generate labels...'
     # return label_name(reverb_data)
     # return label_phone_number(reverb_data)
-    cache_svo(reverb_data)
+    # cache_svo(reverb_data)
+    label_test(reverb_data)
+    
+def label_test(reverb_data):
+    path = os.path.join(__ml_datasets_dir__, 'svo_body')     # two and young
+    fdp = open(path, 'wb')
+
+    two = ['friend', 'two']
+    young = ['young', 'cute', 'kid']
+    description = ['hair', 'nose', 'beautiful', 'eye', 'face', 'ear', 'body']
+    filters = description
+
+    for line in reverb_data:
+        line = line[:-1]
+        line = line.split('\t')
+        
+        rvd_arg1_val = str(line[15]).replace('.', '')
+        # rvd_arg1_val = rvd_arg1_val.split(' ')
+
+        rvd_rel_val = str(line[16]).replace('.', '')
+        # rvd_rel_val = rvd_arg2_val.split(' ')
+
+        rvd_arg2_val = str(line[17]).replace('.', '')
+        # rvd_arg2_val = rvd_arg2_val.split(' ')
+        
+        for item in filters: 
+            if item in rvd_arg1_val or item in rvd_rel_val or item in rvd_arg2_val:
+                tmp = line[15] + ' | ' + line[16] + ' | ' + line[17] + ' | ' + line[12]
+                fdp.writelines(tmp + '\n')
+
+
+
     
 
 def cache_svo(raw):
@@ -44,20 +81,8 @@ def label_name(reverb_data):
         label_list.append(label)
     return label_list
 
-def label_phone_number(reverb_data):
-    label_list = []
-    for line in reverb_data:
-        line = line[:-1]
-
-        line = line.split('\t')
-        rvd_arg1_val = str(line[2])
-        rvd_arg2_val = str(line[4])
-
-        if has_phone_number(rvd_arg1_val) or has_phone_number(rvd_arg2_val):
-            label_list.append(1)
-        else:
-            label_list.append(0)
-    return label_list
+# def label_phone_number(reverb_data):
+    
 
 
 

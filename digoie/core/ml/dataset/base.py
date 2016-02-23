@@ -6,8 +6,8 @@ from sklearn.cross_validation import train_test_split
 
 from digoie.conf.storage import __elastic_search_dir__
 from digoie.core.extractor.reverb import load_data
-from digoie.core.ml.dataset.feature import extract
-from digoie.core.ml.dataset.vector import vectorize
+from digoie.core.ml.dataset import feature
+from digoie.core.ml.dataset import vector
 from digoie.core.ml.dataset.labeling import labeling
 from digoie.conf.global_settings import TARGET_PERSON_NAME, TARGET_PHONE_NUMBER
 
@@ -18,8 +18,8 @@ def generate_dataset(min_df, max_df, target=TARGET_PERSON_NAME):
 
     reverb_data = load_data()
     labels = labeling(reverb_data)
-    featured = extract(reverb_data, target=target)
-    vectorized, feature_names = vectorize(featured, my_min_df=min_df, my_max_df=max_df)
+    featured = feature.extract(reverb_data, target=target)
+    vectorized, feature_names = vector.vectorize(featured, my_min_df=min_df, my_max_df=max_df)
     
 
     X = vectorized

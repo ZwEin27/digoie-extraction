@@ -9,17 +9,60 @@ from digoie.conf.global_settings import TARGET_PERSON_NAME, TARGET_PHONE_NUMBER
 from digoie.core.files.file import *
 
 
-def extract(raw, target=TARGET_PERSON_NAME):
+
+REVERB_OP_MASK_FILENAME = 1 << 1
+REVERB_OP_MASK_SENTNO = 1 << 2
+REVERB_OP_MASK_SENTENCE = 1 << 3
+REVERB_OP_MASK_ARG1 = 1 << 4
+REVERB_OP_MASK_REL = 1 << 5
+REVERB_OP_MASK_ARG2 = 1 << 6
+REVERB_OP_MASK_CONF = 1 << 7
+REVERB_OP_MASK_POST = 1 << 8
+REVERB_OP_MASK_CT = 1 << 9
+REVERB_OP_MASK_DEFAULT = REVERB_OP_MASK_CONF|REVERB_OP_MASK_ARG1|REVERB_OP_MASK_REL|REVERB_OP_MASK_ARG2|REVERB_OP_MASK_POST|REVERB_OP_MASK_CT
+
+
+def extract_spo(raw):
+    print 'extract features...'
+
+
+def extract(raw, target=TARGET_PERSON_NAME, component_mask=REVERB_OP_MASK_DEFAULT):
     print 'extract features...'
     featured = []
     for line in raw:
         line = preprocess_line(line)
+        var_list = []
 
         # load basic info for reverb output line
-        confidence = load_confidence_symbol(line[11])
-        rvd_arg1_val, rvd_rel_val, rvd_arg2_val = load_ar_vals(line, target=target)
-        rvd_arg1_post_tags, rvd_arg1_ct_tags, rvd_rel_post_tags, rvd_rel_ct_tags, rvd_arg2_post_tags, rvd_arg2_ct_tags = preprocess_tags(line)
 
+        if component_mask&REVERB_OP_MASK_CONF:
+            confidence = load_confidence_symbol(line[11])
+            var_list.append(confidence)
+
+        if (component_mask&REVERB_OP_MASK_ARG1) or (component_mask&REVERB_OP_MASK_REL) or (component_mask&REVERB_OP_MASK_ARG2):
+            rvd_arg1_val, rvd_rel_val, rvd_arg2_val = load_ar_vals(line, target=target)
+            if component_mask&REVERB_OP_MASK_ARG1:
+                var_list.append(rvd_arg1_val)
+            if component_mask&REVERB_OP_MASK_REL:
+                var_list.append(rvd_rel_val)
+            if component_mask&REVERB_OP_MASK_ARG2:
+                var_list.append(rvd_arg2_val)
+
+        if (component_mask&REVERB_OP_MASK_POST) or (component_mask&REVERB_OP_MASK_CT):
+            rvd_arg1_post_tags, rvd_arg1_ct_tags, rvd_rel_post_tags, rvd_rel_ct_tags, rvd_arg2_post_tags, rvd_arg2_ct_tags = preprocess_tags(line)
+            if component_mask&REVERB_OP_MASK_POST:
+                var_list.append(rvd_arg1_post_tags)
+                var_list.append(rvd_rel_post_tags)
+                var_list.append(rvd_arg2_post_tags)
+            if component_mask&REVERB_OP_MASK_CT:
+                var_list.append(rvd_arg1_ct_tags)
+                var_list.append(rvd_rel_ct_tags)
+                var_list.append(rvd_arg2_ct_tags)
+
+
+
+
+        """
         var_list = [
                         confidence,
                         rvd_arg1_val,
@@ -32,13 +75,14 @@ def extract(raw, target=TARGET_PERSON_NAME):
                         rvd_arg2_post_tags, 
                         rvd_arg2_ct_tags
                     ]
+        """
 
         rv4fe_data = ' '.join(var_list)
         featured.append(rv4fe_data)
 
 
-    path = os.path.join(__ml_datasets_dir__, 'featured')
-    list2file(featured, path)
+    # path = os.path.join(__ml_datasets_dir__, 'featured')
+    # list2file(featured, path)
 
     return featured
 
