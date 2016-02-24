@@ -4,7 +4,7 @@ from digoie.core.http.stream.base import stream
 from digoie.core.extractor import reverb
 from digoie.core.ml.dataset import feature
 from digoie.core.ml.dataset.labeling import labeling
-from digoie.domain.label import label_extractor
+from digoie.domain.property import label_extractor
 
 
 def extract_label():
