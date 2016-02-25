@@ -22,7 +22,7 @@ def extract_top_words(featured, n_topics=10):
     n_topics = 10
     topics.extend(lauch_nmf(featured, n_topics=n_topics))
     topics.extend(lauch_pda(featured, n_topics=n_topics))
-    print combine_top_words(topics)
+    return combine_top_words(topics)
 
 def combine_top_words(topics):
     words = {}
