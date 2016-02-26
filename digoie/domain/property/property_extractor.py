@@ -13,11 +13,11 @@ properties = ['cute', 'beauties', 'youthfull', 'cowgirl', 'money', 'half', 'enco
 
 def extract(rever_dataset):
     
-    """
+    # """
     fc_mask = feature.REVERB_OP_MASK_ARG1|feature.REVERB_OP_MASK_ARG2
     featured = feature.extract(rever_dataset, component_mask=fc_mask)
     properties = unsupervised.extract(featured)
-    """
-    property_filter.filter(properties)
+    # """
+    # property_filter.filter(properties)
 
 

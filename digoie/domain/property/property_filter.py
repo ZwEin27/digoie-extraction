@@ -72,4 +72,4 @@ def case_filter(prop):
         #         return k
     return False
 
-print filter(['friend'])
+# print filter(['friend'])

@@ -19,9 +19,10 @@ def extract(featured):
 
 def extract_top_words(featured, n_topics=10):
     topics = []
-    n_topics = 10
-    topics.extend(lauch_nmf(featured, n_topics=n_topics))
-    topics.extend(lauch_pda(featured, n_topics=n_topics))
+    n_topics = 75
+    n_top_words = 10
+    topics.extend(lauch_nmf(featured, n_topics=n_topics, n_top_words=n_top_words))
+    # topics.extend(lauch_lda(featured, n_topics=n_topics))
     return combine_top_words(topics)
 
 def combine_top_words(topics):
@@ -32,29 +33,27 @@ def combine_top_words(topics):
             words[str(word)] += 1 # not used
     return words.keys()
 
-def lauch_nmf(featured, n_topics=10):
+def lauch_nmf(featured, n_topics=10, n_top_words=20):
     """ Non-Negative Matrix Factorization (NMF)
     """
     # Use tf-idf features for NMF.
     print "extracting tf-idf features for NMF..."
-    tfidf_vectorizer = TfidfVectorizer(preprocessor=custom_preprocessor, max_df=0.95, min_df=2, #max_features=n_features,
-                                       stop_words='english')
+    tfidf_vectorizer = TfidfVectorizer(preprocessor=custom_preprocessor, max_df=0.95, min_df=2) # max_features=n_features, stop_words='english')
     tfidf = tfidf_vectorizer.fit_transform(featured)
 
     # Fit the NMF model
-    nmf = NMF(n_components=n_topics, random_state=1, alpha=.1, l1_ratio=.5).fit(tfidf)
+    nmf = NMF(n_components=n_topics, random_state=1, alpha=.1, l1_ratio=.5, max_iter=200).fit(tfidf)
 
     tfidf_feature_names = tfidf_vectorizer.get_feature_names()
-    # print_top_words(nmf, tfidf_feature_names, n_top_words)
-    return load_top_words(nmf, tfidf_feature_names)
+    print_top_words(nmf, tfidf_feature_names)
+    return load_top_words(nmf, tfidf_feature_names, n_top_words)
 
-def lauch_pda(featured, n_topics=10):
+def lauch_lda(featured, n_topics=10, n_top_words=20):
     """ Latent Dirichlet Allocation with online variational Bayes algorithm
     """
     # Use tf (raw term count) features for LDA.
     print "extracting tf features for LDA..."
-    tf_vectorizer = CountVectorizer(preprocessor=custom_preprocessor, max_df=0.95, min_df=2, #max_features=n_features,
-                                    stop_words='english')
+    tf_vectorizer = CountVectorizer(preprocessor=custom_preprocessor, max_df=0.95, min_df=2) # max_features=n_features, stop_words='english')
     tf = tf_vectorizer.fit_transform(featured)
     lda = LatentDirichletAllocation(n_topics=n_topics, max_iter=5,
                                     learning_method='online', learning_offset=50.,
@@ -62,11 +61,11 @@ def lauch_pda(featured, n_topics=10):
     lda.fit(tf)
 
     tf_feature_names = tf_vectorizer.get_feature_names()
-    # print_top_words(lda, tf_feature_names, n_top_words)
-    return load_top_words(lda, tf_feature_names)
+    print_top_words(lda, tf_feature_names)
+    return load_top_words(lda, tf_feature_names, n_top_words)
 
 
-def load_top_words(model, feature_names, n_top_words=20):
+def load_top_words(model, feature_names, n_top_words=5):
     result = []
     for topic_idx, topic in enumerate(model.components_):
         topic = [feature_names[i]
@@ -75,7 +74,7 @@ def load_top_words(model, feature_names, n_top_words=20):
     return result
 
 
-def print_top_words(model, feature_names, n_top_words):
+def print_top_words(model, feature_names, n_top_words=5):
     for topic_idx, topic in enumerate(model.components_):
         print "Topic #" + str(topic_idx) + ':'
         print " ".join([feature_names[i]
