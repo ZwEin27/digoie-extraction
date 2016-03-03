@@ -48,7 +48,7 @@ def demo():
     X = vectorized
     y = labels
     from sklearn.cross_validation import train_test_split
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.1, random_state=6)
     from digoie.core.ml.classifier.base import generate_classifier
     clf = generate_classifier(X_train, X_test, y_train, y_test)
 

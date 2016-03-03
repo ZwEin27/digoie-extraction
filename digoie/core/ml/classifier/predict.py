@@ -104,11 +104,15 @@ def predict4path(path, mla, feature_names, predict_feature_names, X, y):
     yvec2file(predict_y, os.path.join(__ml_datasets_dir__, 'predict_y-' + mla ))
     features2file(predict_X, os.path.join(__ml_datasets_dir__, 'predict_X-' + mla), feature_names)
 
+    predict_label = [int(label) for label in predict_label]
+
     # """
 
     print '#################################################################'
     print '#            ' + mla + ' report'
     print '#################################################################'
+    # print 'target_label: ' + str(target_label)
+    # print 'predict_label: ' + str(predict_label)
     print classification_report(target_label, predict_label)
     print 'accuracy: ' + str(accuracy_score(target_label, predict_label))
     print '\n\n'

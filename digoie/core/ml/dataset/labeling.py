@@ -31,8 +31,8 @@ def test():
 
     
 def label_test(reverb_data):
-    path = os.path.join(__ml_datasets_dir__, 'train_label')     # two and young
-    fdp = open(path, 'wb')
+    # path = os.path.join(__ml_datasets_dir__, 'train_label')     # two and young
+    # fdp = open(path, 'wb')
 
     two = ['friend', 'two']
     young = ['young', 'cute', 'kid']
