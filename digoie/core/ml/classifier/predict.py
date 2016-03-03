@@ -25,6 +25,29 @@ def predict(params):
         # defautl
         predict4dir()
 
+def test(path=__pred_data_dir__):
+    from digoie.core.files.file import load_file2list
+    from digoie.conf.storage import __ml_datasets_dir__
+    path = os.path.join(__ml_datasets_dir__, 'test_data')
+    reverb_data = load_file2list(path)
+
+    featured = feature.extract(reverb_data)
+    vectorized, predict_feature_names = vectorize(featured, my_min_df=0, my_max_df=1, update_feature_names=False)
+    feature_names = load_feature_names()
+    # vector = predict_vector(feature_names, predict_feature_names)
+    # report(list(clf.predict([vector]))[0])
+    
+    labels = labeling(reverb_data)
+
+    X = vectorized
+    y = labels
+    predict_feature_names = predict_feature_names.split(',')
+    
+
+    # predict4path(path, DECISION_TREE, feature_names, predict_feature_names, X, y)
+    for mla in MACHINE_LEARNING_ALGORITHMS:
+        predict4path(path, mla, feature_names, predict_feature_names, X, y)
+
 def predict4dir(path=__pred_data_dir__):
 
     reverb_data = reverb.extract(path=path)

@@ -1,11 +1,19 @@
 
 from operator import itemgetter 
 
+
+def load_file2list(path, flag='rU'):
+    fh = open(path, flag)
+    data = []
+    for line in fh:
+        data.append(line)
+    fh.close()
+    return data
+
 def list2file(mylist, path, flag='wb'):
     fdp = open(path, flag)
     for item in mylist:
-        fdp.writelines(item + '\n')
-
+        fdp.writelines(item)
 
 
 def features2file(mylist, path, feature_names, flag='wb'):

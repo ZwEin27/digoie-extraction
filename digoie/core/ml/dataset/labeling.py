@@ -17,16 +17,29 @@ def labeling(reverb_data):
     # return label_name(reverb_data)
     # return label_phone_number(reverb_data)
     # cache_svo(reverb_data)
-    label_test(reverb_data)
+    # label_test(reverb_data)
+    return label_test(reverb_data)
+
+def test():
+    path = os.path.join(__ml_datasets_dir__, 'svo_label')
+    fdp = open(path, 'rU')
+    label_list = []
+    for f in fdp:
+        label_list.append(int(f))
+    # print label_list
+    return label_list
+
     
 def label_test(reverb_data):
-    path = os.path.join(__ml_datasets_dir__, 'svo_body')     # two and young
+    path = os.path.join(__ml_datasets_dir__, 'train_label')     # two and young
     fdp = open(path, 'wb')
 
     two = ['friend', 'two']
     young = ['young', 'cute', 'kid']
     description = ['hair', 'nose', 'beautiful', 'eye', 'face', 'ear', 'body']
     filters = description
+
+    label_list = []
 
     for line in reverb_data:
         line = line[:-1]
@@ -41,10 +54,36 @@ def label_test(reverb_data):
         rvd_arg2_val = str(line[17]).replace('.', '')
         # rvd_arg2_val = rvd_arg2_val.split(' ')
         
+        """
         for item in filters: 
             if item in rvd_arg1_val or item in rvd_rel_val or item in rvd_arg2_val:
                 tmp = line[15] + ' | ' + line[16] + ' | ' + line[17] + ' | ' + line[12]
                 fdp.writelines(tmp + '\n')
+        """
+        label = 0
+        for item in two: 
+            if item in rvd_arg1_val or item in rvd_rel_val or item in rvd_arg2_val:
+                tmp = line[12]
+                # fdp.writelines(tmp + '\n')
+                label = 1
+                break
+
+        for item in young: 
+            if item in rvd_arg1_val or item in rvd_rel_val or item in rvd_arg2_val:
+                tmp = line[12]
+                # fdp.writelines(tmp + '\n')
+                label = 2
+                break
+
+        for item in description: 
+            if item in rvd_arg1_val or item in rvd_rel_val or item in rvd_arg2_val:
+                tmp = line[12]
+                # fdp.writelines(tmp + '\n')
+                label = 3
+                break
+        label_list.append(label)
+
+    return label_list
 
 
 

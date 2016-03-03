@@ -34,7 +34,7 @@ def extract(raw, target=TARGET_PERSON_NAME, component_mask=REVERB_OP_MASK_DEFAUL
         var_list = []
 
         # load basic info for reverb output line
-
+        # print line
         if component_mask&REVERB_OP_MASK_CONF:
             confidence = load_confidence_symbol(line[11])
             var_list.append(confidence)

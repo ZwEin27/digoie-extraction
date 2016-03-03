@@ -9,3 +9,5 @@ from digoie.apps.api import *
 
 
 extract()
+
+# test()
