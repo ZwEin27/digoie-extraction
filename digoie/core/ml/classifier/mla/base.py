@@ -4,12 +4,16 @@ class MLAlgorithm(object):
 
     # ML_MODEL_PATH = __root_dir__ + 'classifier/mla/models/'
 
-    def __init__(self, training_dataset, training_label):
+    def __init__(self, classifier, training_dataset, training_label):
         # self.dataLoader = MLDataLoader()
+        self.classifier = classifier
         self.training_dataset = training_dataset
         self.training_label = training_label
 
-    def generate(self, classifier):
+    def get_classifier(self):
+        return self.classifier
+
+    def generate(self):
         """
         if training_dataset == None:
             feature_names, training_dataset = self.dataLoader.load_train_data()
@@ -18,7 +22,7 @@ class MLAlgorithm(object):
             training_label = self.dataLoader.load_train_label()  
         """
 
-        classifier.fit(self.training_dataset, self.training_label)
+        self.classifier.fit(self.training_dataset, self.training_label)
 
 
 

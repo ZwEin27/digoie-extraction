@@ -11,6 +11,17 @@ from digoie.core.ml.classifier.mla.svc import MLSVC
 from digoie.core.ml.classifier.mla.ada_boost import MLAdaBoost
 from digoie.core.ml.classifier.mla.gaussian_nb import MLGaussianNaiveBayes
 
+def generate_multilabel_classifier(X_train, X_test, y_train, y_test, mla=None):
+    from sklearn.multiclass import OneVsRestClassifier
+    
+
+    model = MLDecisionTree(X_train, y_train)
+    clf = model.get_classifier()
+    classif = OneVsRestClassifier(clf)
+    print y_train
+    classif.fit(X_train, y_train)
+
+
 
 
 def generate_classifier(X_train, X_test, y_train, y_test, mla=None):

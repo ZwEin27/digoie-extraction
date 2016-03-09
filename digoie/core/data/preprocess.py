@@ -58,6 +58,32 @@ def preproc_data():
 
     # """
 
+def train_test_split(path=None, train_point=.2, random_seed=24):
+    if not path:
+        path = os.path.join(__ml_datasets_dir__, 'input')
+
+    dataset = []
+    with open(path, 'rU') as fp:
+        for line in iter(fp.readline, ''):
+            dataset.append(line)
+    
+    datasize = len(dataset)
+
+    import random
+    random.seed(random_seed)
+    random.shuffle(dataset)
+    split_point = int(datasize*train_point)
+
+    path = os.path.join(__ml_datasets_dir__, 'train_data')
+    train_data_fp = open(path, 'wb')
+    train_data_fp.writelines(dataset[:split_point])
+
+    path = os.path.join(__ml_datasets_dir__, 'test_data')
+    test_data_fp = open(path, 'wb')
+    test_data_fp.writelines(dataset[split_point:])
+
+
+
 
 
         

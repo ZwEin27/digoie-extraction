@@ -17,6 +17,8 @@ def demo():
     import os
     from digoie.conf.storage import __ml_datasets_dir__
     from digoie.core.files.file import load_file2list
+    from digoie.domain.property import label_generator
+    from sklearn.multiclass import OneVsRestClassifier
 
     # filename = 'train_data'
     # path = os.path.join(__ml_datasets_dir__, filename)
@@ -28,30 +30,32 @@ def demo():
     path = os.path.join(__ml_datasets_dir__, 'train_data')
     reverb_data = load_file2list(path)
 
-
-    
-
     path = os.path.join(__ml_datasets_dir__, 'train_label')
-    labels = load_file2list(path)
-    labels = [label[0] for label in labels]
+    labels = label_generator.ganerate_multilabel(path)
+    # labels = [label[0] for label in labels]
     print labels
 
-    # return
 
     min_df = 0.0
     max_df = 1.0
     
+    # """
     # labels = labeling(reverb_data)
     featured = feature.extract(reverb_data)
     vectorized, feature_names = vector.vectorize(featured, my_min_df=min_df, my_max_df=max_df)
     
-    X = vectorized
+    X = vectorized[:27]
+    # print X
     y = labels
     from sklearn.cross_validation import train_test_split
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.1, random_state=6)
-    from digoie.core.ml.classifier.base import generate_classifier
-    clf = generate_classifier(X_train, X_test, y_train, y_test)
+    from digoie.core.ml.classifier.base import generate_classifier, generate_multilabel_classifier
 
+    X_train, X_test, y_train, y_test = X, 0, y, 0
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2, random_state=6)
+    
+    # clf = generate_classifier(X_train, X_test, y_train, y_test)
+    clf = generate_multilabel_classifier(X_train, X_test, y_train, y_test)
+    # """
 
 def extract_label():
     dataset = reverb.load_data()
