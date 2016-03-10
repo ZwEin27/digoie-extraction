@@ -1,6 +1,8 @@
 
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
+from sklearn.cross_validation import train_test_split
+import numpy as np
 
 from digoie.conf.machine_learning import DECISION_TREE, RANDOM_FOREST, MACHINE_LEARNING_ALGORITHMS, K_NEIGHBORS, SVM_SVC, AdaBoost, Gaussian_Naive_Bayes
 from digoie.core.ml.dataset.model import save_model
@@ -11,20 +13,102 @@ from digoie.core.ml.classifier.mla.svc import MLSVC
 from digoie.core.ml.classifier.mla.ada_boost import MLAdaBoost
 from digoie.core.ml.classifier.mla.gaussian_nb import MLGaussianNaiveBayes
 
-def generate_multilabel_classifier(X_train, X_test, y_train, y_test, mla=None):
+def generate_multilabel_classifier(X, y, mla=None):
     from sklearn.multiclass import OneVsRestClassifier
+    from sklearn.cross_validation import train_test_split
+    import numpy as np
+    import matplotlib.pyplot as plt
     
+    from sklearn.metrics import precision_recall_curve
+    from sklearn.metrics import average_precision_score
+    from sklearn.cross_validation import train_test_split
+    from sklearn.preprocessing import label_binarize
 
-    model = MLDecisionTree(X_train, y_train)
+    random_state = np.random.RandomState(0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5, random_state=random_state)
+
+    n_samples, n_features = X.shape
+    n_classes = y.shape[1]
+
+    # model = MLDecisionTree(X_train, y_train)
+    model = MLSVC(X_train, y_train)
+    
     clf = model.get_classifier()
     classif = OneVsRestClassifier(clf)
-    print y_train
-    classif.fit(X_train, y_train)
+    # print y_train
+    # y_score = classif.fit(X_train, y_train).decision_function(X_test)
+    y_score = classif.fit(X_train, y_train).predict(X_test)
+    save_model('OneVsRest', classif)
 
 
 
+    # print 'y_score'
+    # print y_score
+    
+    # Compute Precision-Recall and plot curve
+    precision = dict()
+    recall = dict()
+    average_precision = dict()
+    for i in range(n_classes):
+        precision[i], recall[i], _ = precision_recall_curve(y_test[:, i],
+                                                            y_score[:, i])
+        average_precision[i] = average_precision_score(y_test[:, i], y_score[:, i])
 
-def generate_classifier(X_train, X_test, y_train, y_test, mla=None):
+    print 'precision'
+    print precision
+    print 'recall'
+    print recall
+
+    """
+    # predict_label = list(classif.predict(X_test))
+    # target_label = y_test
+    # print X_test
+    # print predict_label
+    # print target_label
+    # print classification_report(target_label, predict_label)
+    
+    # Plot Precision-Recall curve
+    
+    plt.clf()
+    plt.plot(recall[0], precision[0], label='Precision-Recall curve')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.ylim([0.0, 1.05])
+    plt.xlim([0.0, 1.0])
+    plt.title('Precision-Recall example: AUC={0:0.2f}'.format(average_precision[0]))
+    plt.legend(loc="lower left")
+    plt.show()
+    
+    # Compute micro-average ROC curve and ROC area
+    precision["micro"], recall["micro"], _ = precision_recall_curve(y_test.ravel(),
+        y_score.ravel())
+    average_precision["micro"] = average_precision_score(y_test, y_score,
+                                                         average="micro")
+
+    # Plot Precision-Recall curve for each class
+    plt.clf()
+    plt.plot(recall["micro"], precision["micro"],
+             label='micro-average Precision-recall curve (area = {0:0.2f})'
+                   ''.format(average_precision["micro"]))
+    for i in range(n_classes):
+        plt.plot(recall[i], precision[i],
+                 label='Precision-recall curve of class {0} (area = {1:0.2f})'
+                       ''.format(i, average_precision[i]))
+
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Extension of Precision-Recall curve to multi-class')
+    plt.legend(loc="lower right")
+    plt.show()
+
+    """
+
+def generate_classifier(X, y, mla=None):
+    random_state = np.random.RandomState(0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5, random_state=random_state)
+
 
     if mla == None:
         for mla in MACHINE_LEARNING_ALGORITHMS:

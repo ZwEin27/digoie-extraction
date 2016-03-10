@@ -31,31 +31,33 @@ def demo():
     reverb_data = load_file2list(path)
 
     path = os.path.join(__ml_datasets_dir__, 'train_label')
-    labels = label_generator.ganerate_multilabel(path)
+    # labels = label_generator.ganerate_multilabel(path)
+    labels = label_generator.ganerate_singlelabel(path)
     # labels = [label[0] for label in labels]
     print labels
 
-
+    """
     min_df = 0.0
     max_df = 1.0
     
-    # """
+    
     # labels = labeling(reverb_data)
     featured = feature.extract(reverb_data)
     vectorized, feature_names = vector.vectorize(featured, my_min_df=min_df, my_max_df=max_df)
     
-    X = vectorized[:27]
+    X = vectorized[:402]
     # print X
     y = labels
-    from sklearn.cross_validation import train_test_split
+    # print y
     from digoie.core.ml.classifier.base import generate_classifier, generate_multilabel_classifier
 
-    X_train, X_test, y_train, y_test = X, 0, y, 0
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2, random_state=6)
+    # X_train, X_test, y_train, y_test = X, 0, y, 0
+    
     
     # clf = generate_classifier(X_train, X_test, y_train, y_test)
-    clf = generate_multilabel_classifier(X_train, X_test, y_train, y_test)
-    # """
+    clf = generate_classifier(X, y)
+    # clf = generate_multilabel_classifier(X, y)
+    """
 
 def extract_label():
     dataset = reverb.load_data()

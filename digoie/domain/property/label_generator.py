@@ -5,6 +5,18 @@ from digoie.conf.storage import __ml_datasets_dir__
 import numpy as np
 
 
+def ganerate_singlelabel(path=None):
+    if not path:
+        path = os.path.join(__ml_datasets_dir__, 'train_label')
+    labels = []
+    with open(path, 'r') as fp:
+        for line in fp.readlines():
+            line = line.strip('\n')
+            line = line.split(',')
+            idx = HT_LABELS.index(line[0])
+            labels.append(idx)
+    return np.array(labels)
+
 def ganerate_multilabel(path=None):
     if not path:
         path = os.path.join(__ml_datasets_dir__, 'train_label')

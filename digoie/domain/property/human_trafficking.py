@@ -18,6 +18,16 @@ Focus:
 
 """
 HT_NONE = 'HT_NONE'
+HT_GROUP = 'HT_GROUP'
+HT_YOUNG = 'HT_YOUNG'
+HT_DESC = 'HT_DESC'
+
+HT_LABELS = [
+                HT_NONE,
+                HT_GROUP,
+                HT_YOUNG,
+                HT_DESC
+            ]
 
 
 # Common Work and Living Conditions: The individual(s) in question
@@ -65,7 +75,7 @@ HT_INCONSISTENCY = 'HT_INCONSISTENCY'
 
 # DESCRIPTION
 # http://adjectivesstarting.com/adjectives-to-describe-a-person/
-HT_DESC = 'HT_DESC'
+
 
 HT_DESC_NATIONALITY = 'HT_DESC_NATIONALITY'   # Nationality is the nation or country to which someone belongs to. 
 HT_DESC_PHSICAL_APPEARANCE = 'HT_DESC_PHSICAL_APPEARANCE'          # Physical appearance is self-explanatory.
@@ -88,6 +98,9 @@ HT_ACT_FIND = 'HT_ACT_FIND'           # the way to find this
 
 
 
+
+
+"""
 HT_LABELS = [
                 HT_NO_FREEDOM,
                 HT_UNDER_18,
@@ -115,5 +128,6 @@ HT_LABELS = [
                 HT_ACT_SEX_POSITION,
                 HT_ACT_FIND
             ]
+"""
 
 # print HT_LABELS
