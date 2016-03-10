@@ -8,7 +8,17 @@ https://polarisproject.org/recognize-signs
 Resources:
 http://humantrafficking.unc.edu/resources/
 
+
+Focus:
+
+0. HT_NONE: otherwise
+1. HT_ACT_SEX_GROUP: two more girls
+2. HT_UNDER_18: young
+3. HT_DESC: description
+
 """
+HT_NONE = 'HT_NONE'
+
 
 # Common Work and Living Conditions: The individual(s) in question
 
@@ -55,6 +65,7 @@ HT_INCONSISTENCY = 'HT_INCONSISTENCY'
 
 # DESCRIPTION
 # http://adjectivesstarting.com/adjectives-to-describe-a-person/
+HT_DESC = 'HT_DESC'
 
 HT_DESC_NATIONALITY = 'HT_DESC_NATIONALITY'   # Nationality is the nation or country to which someone belongs to. 
 HT_DESC_PHSICAL_APPEARANCE = 'HT_DESC_PHSICAL_APPEARANCE'          # Physical appearance is self-explanatory.

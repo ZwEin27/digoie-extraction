@@ -61,8 +61,6 @@ def extract_label():
     dataset = reverb.load_data()
     property_extractor.extract(dataset)
 
-
-
 def extract():
     """ extract useful information
     
@@ -80,9 +78,6 @@ def extract():
     # featured = feature.extract(dataset)
     # labels = labeling(dataset)
     # print labels
-
-
-
 
 def test():
     # from digoie.core.ml.dataset.base import generate_dataset
