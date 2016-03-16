@@ -2,6 +2,8 @@
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 from sklearn.cross_validation import train_test_split
+from sklearn.metrics import precision_recall_fscore_support
+from sklearn import cross_validation
 import numpy as np
 
 from digoie.conf.machine_learning import DECISION_TREE, RANDOM_FOREST, MACHINE_LEARNING_ALGORITHMS, K_NEIGHBORS, SVM_SVC, AdaBoost, Gaussian_Naive_Bayes
@@ -12,20 +14,20 @@ from digoie.core.ml.classifier.mla.knn import MLKNeighbors
 from digoie.core.ml.classifier.mla.svc import MLSVC
 from digoie.core.ml.classifier.mla.ada_boost import MLAdaBoost
 from digoie.core.ml.classifier.mla.gaussian_nb import MLGaussianNaiveBayes
+from sklearn.metrics import precision_recall_curve
 
 def generate_multilabel_classifier(X, y, mla=None):
     from sklearn.multiclass import OneVsRestClassifier
-    from sklearn.cross_validation import train_test_split
     import numpy as np
     import matplotlib.pyplot as plt
     
-    from sklearn.metrics import precision_recall_curve
+    
     from sklearn.metrics import average_precision_score
     from sklearn.cross_validation import train_test_split
     from sklearn.preprocessing import label_binarize
 
-    random_state = np.random.RandomState(0)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5, random_state=random_state)
+    random_state = np.random.RandomState(24)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2, random_state=random_state)
 
     n_samples, n_features = X.shape
     n_classes = y.shape[1]
@@ -105,9 +107,28 @@ def generate_multilabel_classifier(X, y, mla=None):
 
     """
 
-def generate_classifier(X, y, mla=None):
-    random_state = np.random.RandomState(0)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5, random_state=random_state)
+def launch_cross_validation(X, y, mla=None):
+    n_samples, n_features = X.shape
+    # n_classes = y.shape[1]
+
+    # loop = cross_validation.LeaveOneOut(n_samples)
+    loop = cross_validation.KFold(n_samples, n_folds=4)
+
+    for train_index, test_index in loop:
+        # print("TRAIN:", train_index, "TEST:", test_index)
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+        # print(X_train, X_test, y_train, y_test)
+        generate_classifier(X_train, X_test, y_train, y_test)
+        break
+
+
+
+
+
+def generate_classifier(X_train, X_test, y_train, y_test, mla=None):
+    # random_state = np.random.RandomState(35)
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5, random_state=random_state)
 
 
     if mla == None:
@@ -148,7 +169,18 @@ def train(X_train, y_train, mla=DECISION_TREE):
 def test(X_test, y_test, mla, clf):
     predict_label = list(clf.predict(X_test))
     target_label = y_test
+
+    import os
+    from digoie.conf.storage import __ml_datasets_dir__
+    from digoie.core.files.file import Xvec2file, yvec2file, features2file
+    yvec2file(y_test, os.path.join(__ml_datasets_dir__, 'y_predict'))
+
+    # precision, recall, _ = precision_recall_curve(target_label, predict_label)
+    print precision_recall_fscore_support(target_label, predict_label)
+
     
+
+    # """
     print '+--------------------------------------------------------+'
     print '|                   Classifier Report                    +'
     print '+--------------------------------------------------------+'
@@ -156,6 +188,7 @@ def test(X_test, y_test, mla, clf):
     print classification_report(target_label, predict_label)
     print 'accuracy: ' + str(accuracy_score(target_label, predict_label))
     print '\n\n'
+    # """
 
 
 

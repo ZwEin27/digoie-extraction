@@ -58,7 +58,7 @@ def preproc_data():
 
     # """
 
-def train_test_split(path=None, train_point=.2, random_seed=24):
+def train_test_split(path=None, train_point=.2, random_seed=24, train_file_name='train_data', test_file_name='test_data'):
     if not path:
         path = os.path.join(__ml_datasets_dir__, 'input')
 
@@ -74,18 +74,32 @@ def train_test_split(path=None, train_point=.2, random_seed=24):
     random.shuffle(dataset)
     split_point = int(datasize*train_point)
 
-    path = os.path.join(__ml_datasets_dir__, 'train_data')
+    path = os.path.join(__ml_datasets_dir__, train_file_name)
     train_data_fp = open(path, 'wb')
     train_data_fp.writelines(dataset[:split_point])
 
-    path = os.path.join(__ml_datasets_dir__, 'test_data')
+    path = os.path.join(__ml_datasets_dir__, test_file_name)
     test_data_fp = open(path, 'wb')
     test_data_fp.writelines(dataset[split_point:])
 
 
 
 
+def train_test_split_data(X, y, test_size=.2, random_seed=23):
+    import random
+    random.seed(random_seed)
+    random.shuffle(X)
+    random.shuffle(y)
+    datasize = len(X)
+    split_point = int(datasize*test_size)
 
+    X_test = X[:split_point]
+    X_train = X[split_point:]
+
+    y_test = y[:split_point]
+    y_train = y[split_point:]
+
+    return X_train, X_test, y_train, y_test
         
 
         
