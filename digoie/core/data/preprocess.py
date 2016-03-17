@@ -5,7 +5,9 @@ import re
 from digoie.conf.storage import __ml_datasets_dir__
 
 def preproc_data():
-
+    """
+        Departed 
+    """
     """
     path = os.path.join(__ml_datasets_dir__, 'input')
     fh_input = open(path, 'rU')
@@ -59,6 +61,15 @@ def preproc_data():
     # """
 
 def train_test_split(path=None, train_point=.2, random_seed=24, train_file_name='train_data', test_file_name='test_data'):
+    """ Split train and test for file
+        
+    Keyword Arguments:
+        path {[type]} -- [description] (default: {None})
+        train_point {number} -- [description] (default: {.2})
+        random_seed {number} -- [description] (default: {24})
+        train_file_name {str} -- [description] (default: {'train_data'})
+        test_file_name {str} -- [description] (default: {'test_data'})
+    """
     if not path:
         path = os.path.join(__ml_datasets_dir__, 'input')
 
@@ -86,6 +97,7 @@ def train_test_split(path=None, train_point=.2, random_seed=24, train_file_name=
 
 
 def train_test_split_data(X, y, test_size=.2, random_seed=23):
+
     import random
     random.seed(random_seed)
     random.shuffle(X)
