@@ -53,7 +53,7 @@ def demo():
 
     # train classifier
     split_seed = 59
-    split_test_rate = .5
+    split_test_rate = .2
 
     X_train, X_test, y_train, y_test = preprocess.train_test_split_data(reverb_data, labels, test_size=split_test_rate, random_seed=split_seed)
 
