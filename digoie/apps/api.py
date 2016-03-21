@@ -1,3 +1,5 @@
+import numpy as np
+import os
 from digoie.core.http.stream.base import stream
 from digoie.core.extractor import reverb
 from digoie.core.ml.dataset import feature
@@ -6,21 +8,25 @@ from digoie.domain.property import property_extractor
 from digoie.core.extractor.reverb import load_data
 from digoie.core.ml.dataset import feature
 from digoie.core.ml.dataset import vector
-import numpy as np
+from digoie.conf.storage import __ml_datasets_dir__
+from digoie.core.files.file import load_file2list
+from digoie.domain.property import label_generator
+from sklearn.multiclass import OneVsRestClassifier
+from digoie.core.data import preprocess
+from digoie.core.files.file import Xvec2file, yvec2file, features2file, list2file
 
 
+def ooc():
+    path = os.path.join(__ml_datasets_dir__, 'young')
+    reverb_data = load_file2list(path)
+    print reverb_data
+    
 
 def demo():
     # reverb_data = reverb.extract()
     # reverb_data = load_data()
-    import os
-    from digoie.conf.storage import __ml_datasets_dir__
-    from digoie.core.files.file import load_file2list
-    from digoie.domain.property import label_generator
-    from sklearn.multiclass import OneVsRestClassifier
-    from digoie.core.data import preprocess
-    from digoie.conf.storage import __ml_datasets_dir__
-    from digoie.core.files.file import Xvec2file, yvec2file, features2file, list2file
+    
+    
 
     
     # filename = 'train_data'
