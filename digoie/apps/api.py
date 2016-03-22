@@ -17,10 +17,47 @@ from digoie.core.files.file import Xvec2file, yvec2file, features2file, list2fil
 
 
 def ooc():
-    path = os.path.join(__ml_datasets_dir__, 'young')
+    from sklearn import svm
+    from digoie.core.ml.classifier import predict
+
+    # training
+    path = os.path.join(__ml_datasets_dir__, 'group')
     reverb_data = load_file2list(path)
-    print reverb_data
+    # print reverb_data
     
+    featured = feature.extract(reverb_data)
+    vectorized, feature_names = vector.vectorize(featured, my_min_df=0, my_max_df=1)
+
+    train_size_rate = int(.9*(len(vectorized)))
+
+    X_train = vectorized[:train_size_rate]
+    X_train_size = len(X_train)
+    X_test = vectorized[train_size_rate:]
+    X_test_size = len(X_test)
+    
+    # testing
+    path = os.path.join(__ml_datasets_dir__, 'outlier')
+    outlier = load_file2list(path)
+
+    featured = feature.extract(outlier)
+    vectorized, predict_feature_names = vector.vectorize(featured, my_min_df=0, my_max_df=1)
+
+    X_outliers = predict.transfer_pre_vector(feature_names, predict_feature_names, vectorized) 
+    X_outliers_size = len(X_outliers)
+
+
+    clf = svm.OneClassSVM(nu=0.1, kernel="rbf")
+    clf.fit(X_train)
+    y_pred_train = clf.predict(X_train)
+    y_pred_test = clf.predict(X_test)
+    y_pred_outliers = clf.predict(X_outliers)
+    n_error_train = y_pred_train[y_pred_train == -1].size
+    n_error_test = y_pred_test[y_pred_test == -1].size
+    n_error_outliers = y_pred_outliers[y_pred_outliers == 1].size
+
+    print "error train: %d/%d ; errors novel regular: %d/%d ; errors novel abnormal: %d/%d" % (n_error_train, X_train_size, n_error_test, X_test_size, n_error_outliers, X_outliers_size)
+
+
 
 def demo():
     # reverb_data = reverb.extract()

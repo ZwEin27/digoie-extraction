@@ -70,6 +70,22 @@ def predict4dir(path=__pred_data_dir__):
     for mla in MACHINE_LEARNING_ALGORITHMS:
         predict4path(path, mla, feature_names, predict_feature_names, X, y)
 
+
+
+def transfer_pre_vector(feature_names, predict_feature_names, X):
+    predict_X = []
+    idx = 0
+    for fn in X:
+        tmp = [str(digit) for digit in list(fn)]
+        tmp = [i for i in range(len(tmp)) if tmp[i] == '1']
+        tmp = itemgetter(*tmp)(predict_feature_names)
+        tmp = ','.join(tmp) 
+        vector = predict_vector(feature_names, tmp)
+        predict_X.append(vector)
+        idx += 1
+    return predict_X
+
+
 def predict4path(path, mla, feature_names, predict_feature_names, X, y):
     # mla = AdaBoost
     clf = load_model(mla)
