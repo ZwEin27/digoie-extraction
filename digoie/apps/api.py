@@ -28,7 +28,7 @@ def ooc():
     featured = feature.extract(reverb_data)
     vectorized, feature_names = vector.vectorize(featured, my_min_df=0, my_max_df=1)
 
-    train_size_rate = int(.9*(len(vectorized)))
+    train_size_rate = int(.5*(len(vectorized)))
 
     X_train = vectorized[:train_size_rate]
     X_train_size = len(X_train)
